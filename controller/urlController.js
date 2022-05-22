@@ -10,6 +10,7 @@ const isValid = function (value) {
     return true
 }
 
+
 //Redis Connection 
 const redisClient = redis.createClient(
     11570,
@@ -48,7 +49,7 @@ function generateString(length) {
 
 const shortUrl = async (req, res) => {
     try {
-        let urlRegex = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+        let urlRegex = /(^| )(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,8}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi
         let data = req.body
         let host = 'localhost'
         let port = 3000
@@ -60,20 +61,20 @@ const shortUrl = async (req, res) => {
 
         let checklongurl = longUrl.match(urlRegex)
         if (!checklongurl) {
-            return res.status(400).send({ status: false, msg: "Please enter longurl" })
+            return res.status(400).send({ status: false, msg: "Please enter valid longurl" })
         }
 
 
         let dataFromCached = await GET_ASYNC(`${checklongurl}`)
         if (dataFromCached) {
              console.log("fromRedis")
-            return res.status(200).send({ status: true, data:JSON.parse(dataFromCached)})
+            return res.status(201).send({ status: true, data:JSON.parse(dataFromCached)})
         }
 
 
             const foundedUrl = await urlModel.findOne({ longUrl: longUrl }).select({ urlCode: 1, longUrl: 1, shortUrl: 1, _id: 0 })
             if (foundedUrl) {
-                return res.status(200).send({ status: true, data: foundedUrl })
+                return res.status(201).send({ status: true, data: foundedUrl })
             }
 
             const urlCode = generateString(10).toLowerCase()
@@ -84,9 +85,6 @@ const shortUrl = async (req, res) => {
 
 
             await SET_ASYNC(`${selectedData.longUrl}`, JSON.stringify(selectedData))
-
-            await SET_ASYNC(`${selectedData.urlCode}`,selectedData.longUrl)
-
             res.status(201).send({ status: true, data: selectedData })
 
         }catch (error) {
@@ -134,3 +132,11 @@ const FetchUrl = async (req, res) => {
     module.exports.shortUrl = shortUrl
     module.exports.FetchUrl = FetchUrl
 
+
+
+
+
+
+
+
+    //await SET_ASYNC(`${selectedData.urlCode}`,selectedData.longUrl)

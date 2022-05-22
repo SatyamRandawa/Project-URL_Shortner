@@ -1,0 +1,28 @@
+{
+  "name": "project-4-url-shortner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shamakhan11/project-4-url-shortner.git"
+  },
+  "keywords": [],
+  "author": "Saham Khan, Satyam Randawa, Avinash Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shamakhan11/project-4-url-shortner/issues"
+  },
+  "homepage": "https://github.com/shamakhan11/project-4-url-shortner#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.4",
+    "nodemon": "^2.0.16",
+    "redis": "^3.1.2",
+    "short-id": "^0.1.0-1"
+  }
+}
